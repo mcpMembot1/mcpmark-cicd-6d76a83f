@@ -387,9 +387,10 @@ EOF
           ARTIFACT_SHA256: ${{ needs.rollback-preparation.outputs.artifact-sha256 }}
         run: |
           set -euo pipefail
+          cd downloaded-rollback
           printf '%s  %s.tar.gz\n' "${ARTIFACT_SHA256}" "${ARTIFACT_NAME}" > expected.sha256
-          sha256sum -c expected.sha256 --ignore-missing
-          mv expected.sha256 downloaded-rollback/expected.sha256
+          mv expected.sha256 "${ARTIFACT_NAME}.tar.gz.expected.sha256"
+          sha256sum -c "${ARTIFACT_NAME}.tar.gz.expected.sha256"
 
       - name: Finalize deployment issue
         uses: actions/github-script@v7
